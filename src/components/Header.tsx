@@ -1,5 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
+import { useCart } from '@/hooks/useCart';
 import { Button } from '@/components/ui/button';
 import { 
   DropdownMenu, 
@@ -8,10 +9,12 @@ import {
   DropdownMenuSeparator, 
   DropdownMenuTrigger 
 } from '@/components/ui/dropdown-menu';
-import { Candy, User, LogOut, Shield, ShoppingBag } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Candy, User, LogOut, Shield, ShoppingBag, ShoppingCart } from 'lucide-react';
 
 const Header = () => {
   const { user, profile, isAdmin, signOut } = useAuth();
+  const { itemCount } = useCart();
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
@@ -31,7 +34,7 @@ const Header = () => {
           </span>
         </Link>
 
-        <nav className="flex items-center gap-4">
+        <nav className="flex items-center gap-2 sm:gap-4">
           {user ? (
             <>
               {isAdmin && (
@@ -42,6 +45,19 @@ const Header = () => {
                   </Button>
                 </Link>
               )}
+
+              <Link to="/cart" className="relative">
+                <Button variant="ghost" size="icon" className="relative">
+                  <ShoppingCart className="w-5 h-5" />
+                  {itemCount > 0 && (
+                    <Badge 
+                      className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs candy-gradient border-0"
+                    >
+                      {itemCount > 9 ? '9+' : itemCount}
+                    </Badge>
+                  )}
+                </Button>
+              </Link>
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -64,6 +80,12 @@ const Header = () => {
                     )}
                   </div>
                   <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link to="/cart" className="cursor-pointer">
+                      <ShoppingCart className="w-4 h-4 mr-2" />
+                      My Cart ({itemCount})
+                    </Link>
+                  </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link to="/purchases" className="cursor-pointer">
                       <ShoppingBag className="w-4 h-4 mr-2" />

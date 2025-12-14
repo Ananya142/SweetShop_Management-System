@@ -161,7 +161,7 @@ const Index = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredSweets.map((sweet, index) => (
               <div key={sweet.id} style={{ animationDelay: `${index * 0.05}s` }}>
-                <SweetCard sweet={sweet} onPurchase={fetchSweets} />
+                <SweetCard sweet={sweet} />
               </div>
             ))}
           </div>
